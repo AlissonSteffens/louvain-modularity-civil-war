@@ -177,7 +177,7 @@ Louvain migrarVertices(Louvain louvain, int comunidadeOrigem, int comunidadeDest
 
 	int indiceComunidadeOrigem = obterIndiceComunidade(louvain, comunidadeOrigem);
 	
-	if (indiceComunidadeOrigem != -1 && verticesNaAntigaComunidade == 0)
+	if (indiceComunidadeOrigem == -1 && verticesNaAntigaComunidade == 0)
 		louvain.comunidades.erase(louvain.comunidades.begin(), louvain.comunidades.begin() + indiceComunidadeOrigem);
 	return louvain;
 }
