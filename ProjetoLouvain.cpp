@@ -312,8 +312,17 @@ int main(int argc, char** argv)
 		}
 	} while (houveMelhora);
 
-	for (int v = 0; v < louvain.vertices.size(); v++){
-		cout << nomes[v] << '\t' << louvain.vertices[v] << '\n';
+	for (int c = 0; c < louvain.comunidades.size(); c++){
+		
+		
+		Vertices vertices = obterVerticesDaComunidade(louvain, c);
+		if(vertices.size() > 0){
+			cout<< "\nComunidade "<< c <<'\n';
+			for(int v : vertices)
+				cout << nomes[v];
+		}
+		
+		//cout << nomes[v] << '\t' << louvain.vertices[v] << '\n';
 		// printf("V[%d] -> C[%d] \n", v, louvain.vertices[v]);
 	}
 		
