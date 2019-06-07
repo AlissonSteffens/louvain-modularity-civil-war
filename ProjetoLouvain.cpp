@@ -226,7 +226,7 @@ int obterQuantidadeTotalArestas(MatrizAdj matriz) {
 	for (int i = 0; i < matriz.size(); i++)
 		for (int j = 0; j < matriz.size(); j++)
 			total += matriz[i][j];
-	return total;
+	return total/2;
 }
 
 /*
@@ -240,22 +240,18 @@ int obterQuantidadeTotalArestas(MatrizAdj matriz) {
 	Um valor que indica a modularidade
  */
 double obterModularidadeQ(Louvain louvain) {
-	double Q = 0.0;
-	double E = obterQuantidadeTotalArestas(louvain.matriz);
-	for (int comunidade : louvain.comunidades) {
-		Vertices vertices = obterVerticesDaComunidade(louvain, comunidade);
-		for (int i : vertices) {
-			double di = obterGrau(louvain, i);
-			for (int j : vertices) {
-				if (i != j) {
-					double a = louvain.matriz[i][j];
-					double dj = obterGrau(louvain, j);
-					Q += a - (di * dj) / E;
-				}
+	
+	double de = 2*obterQuantidadeTotalArestas(louvain.matriz);
+	double sum = 0.0;
+	for(int c = 0 ; c < louvain.comunidades.size(); c++){
+		Vertices verts = obterVerticesDaComunidade(louvain, louvain.comunidades[c]);
+		for(int i = 0 ; i < verts.size(); i++){
+			for(int j = 0 ; j < verts.size(); j++){
+				sum += louvain.matriz[verts[i]][verts[j]] - ((obterGrau(louvain,verts[i]) * obterGrau(louvain,verts[j]))/de);
 			}
 		}
 	}
-	return (1 / E) * Q;
+	return (1/de)*sum;
 }
 
 /*
