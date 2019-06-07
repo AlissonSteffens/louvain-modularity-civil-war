@@ -14,6 +14,7 @@ using Names = vector<string>;
 
 Names nomes;
 
+bool draw = false;
 /*
 	Esta função divide uma string 's' utilizando o caracter 'c' como separador
 	
@@ -50,7 +51,6 @@ const vector<string> splitString(const string& s, const char& c)
  */
 MatrizAdj obterInstancia(string instancia) {
 	MatrizAdj matriz;
-	cout << instancia << endl;
 	ifstream arquivo(instancia);
 	string linha;
 
@@ -71,14 +71,21 @@ MatrizAdj obterInstancia(string instancia) {
 	}
 
 	getline(arquivo, linha);
+	if(draw)
+		cout<<"var edges = [";
+
 	while (getline(arquivo, linha)) {
 		separado = { splitString(linha, ' ') };
 		int i = stoi(separado[0]) - 1;
 		int j = stoi(separado[1]) - 1;
-		// cout << "{from: "<<i<<", to: "<<j<<"},";
+		
+		if(draw)
+			cout << "{from: "<<i<<", to: "<<j<<"},";
 		matriz[i][j] = 1;
 		matriz[j][i] = 1;
 	}
+	if(draw)
+		cout<<"];\n";
 
 	return matriz;
 }
@@ -289,7 +296,13 @@ int main(int argc, char** argv)
 	// Caso um valor menor que dois, entõa o arquivo.net não foi passado como parâmetro para o programa
 	if (argc < 2)
         cerr << "no input file's name\n"<< endl;
-
+	if (argc >= 3){
+		string d = "-draw";
+		if(d.compare(argv[2]) == 0){
+			draw = true;
+		}
+			
+	}
 	Louvain louvain = Louvain(argv[1]);	
 	
 	louvain.modularidade = obterModularidadeQ(louvain);
@@ -313,20 +326,20 @@ int main(int argc, char** argv)
 		}
 	} while (houveMelhora);
 
-	for (int v = 0; v < louvain.vertices.size(); v++)
-		cout<<"{id: "<<v<<", label: "<<nomes[v]<<", group: "<<louvain.vertices[v]<<"},";
-	// for (int c = 0; c < louvain.comunidades.size(); c++){
+	if(draw){
+		cout<<"var nodes = [";
+		for (int v = 0; v < louvain.vertices.size(); v++)
+			cout<<"{id: "<<v<<", label: "<<nomes[v]<<", group: "<<louvain.vertices[v]<<"},";
+		cout<<"];\n";
 		
-		
-	// 	Vertices vertices = obterVerticesDaComunidade(louvain, c);
-	// 	if(vertices.size() > 0){
-	// 		cout<< "\nComunidade "<< c <<'\n';
-	// 		for(int v : vertices)
-	// 			cout << nomes[v];
-	// 	}
-		
-	// 	//cout << nomes[v] << '\t' << louvain.vertices[v] << '\n';
-	// 	// printf("V[%d] -> C[%d] \n", v, louvain.vertices[v]);
-	// }
-		
+	}else{
+		for (int c = 0; c < louvain.comunidades.size(); c++){
+			Vertices vertices = obterVerticesDaComunidade(louvain, c);
+			if(vertices.size() > 0){
+				cout<< "\nComunidade "<< c <<'\n';
+				for(int v : vertices)
+					cout << nomes[v];
+			}
+		}
+	}
 }
