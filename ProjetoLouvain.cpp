@@ -32,7 +32,7 @@ const vector<string> splitString(const string& s, const char& c)
 MatrizAdj obterInstancia(string instancia) {
 	MatrizAdj matriz;
 	cout << instancia << endl;
-	ifstream arquivo("instancias/" + instancia);
+	ifstream arquivo(instancia);
 	string linha;
 
 	getline(arquivo, linha);
@@ -182,9 +182,12 @@ Louvain migrarVertices(Louvain louvain, int comunidadeOrigem, int comunidadeDest
 	return louvain;
 }
 
-int main()
+int main(int argc, char** argv)
 {
-	Louvain louvain = Louvain("civilwar.net");	
+	if (argc < 2)
+        cerr << "no input file's name\n"<< endl;
+	
+	Louvain louvain = Louvain(argv[1]);	
 	louvain.modularidade = obterModularidadeQ(louvain);
 	bool houveMelhora;
 	do {
