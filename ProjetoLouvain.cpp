@@ -14,6 +14,16 @@ using Names = vector<string>;
 
 Names nomes;
 
+/*
+	Esta função divide uma string 's' utilizando o caracter 'c' como separador
+	
+	Args:
+	s -> A String a fer dividada
+	c -> O caracter de separação
+
+	Return:
+	um vetor de substrings de 's'
+ */
 const vector<string> splitString(const string& s, const char& c)
 {
 	string buff{ "" };
@@ -29,6 +39,15 @@ const vector<string> splitString(const string& s, const char& c)
 	return v;
 }
 
+/*
+	Esta função Lê um arquivo no estilo .net e gera um grafo para o algoritmo
+	
+	Args:
+	instancia -> O nome do arquivo a ser lido
+
+	Return:
+	a matriz de adjacência do grafo lido
+ */
 MatrizAdj obterInstancia(string instancia) {
 	MatrizAdj matriz;
 	cout << instancia << endl;
@@ -42,6 +61,7 @@ MatrizAdj obterInstancia(string instancia) {
 	nomes = Names(N);
 	for (int i = 0; i < N; i++) {
 		getline(arquivo, linha);
+		// Aqui são lidos os labels do grafo, eles não são utilizados no algorítmo, mas são úteis na exibição das resostas
 		vector<string> nodo{ splitString(linha, ' ') };
 		nomes[i] = nodo[1];
 
@@ -62,6 +82,13 @@ MatrizAdj obterInstancia(string instancia) {
 	return matriz;
 }
 
+/*
+	Este procedimento renderiza uma matriz  no console
+	
+	Args:
+	matriz -> A matriz a ser exibida
+	
+ */
 void exibirMatriz(MatrizAdj matriz) {
 	int N = matriz.size();
 	for (int i = 0; i < N; i++) {
@@ -72,12 +99,14 @@ void exibirMatriz(MatrizAdj matriz) {
 	}
 }
 
+// Esta estrutura é referente ao algoritmo, e representa seus atributos
 struct Louvain {
 	MatrizAdj matriz;
 	Vertices vertices;
 	Comunidades comunidades;
 	double modularidade;
-
+	
+	// O construtor do algortmo recebe como parâmetro o nome do arquivo onde está descrito o grafo
 	Louvain(string instancia) {
 		matriz = obterInstancia(instancia);
 
@@ -94,6 +123,16 @@ struct Louvain {
 		matriz(matriz), vertices(vertices), comunidades(comunidades), modularidade(modularidade) {};
 };
 
+/*
+	Esta função obtem os vertices de uma comunidade
+	
+	Args:
+	louvain -> A instancia do algoritmo
+	comunidade -> O id referenta à comunidade
+
+	Return:
+	uma lista com todos os vertices da 'comunidade'
+ */
 Vertices obterVerticesDaComunidade(Louvain louvain, int comunidade) {
 	Vertices vertices = Vertices();
 	for (int i = 0; i < louvain.vertices.size(); i++)
@@ -102,6 +141,16 @@ Vertices obterVerticesDaComunidade(Louvain louvain, int comunidade) {
 	return vertices;
 }
 
+/*
+	Esta função obtem as comunidades vizinhas à  uma 'comunidade'
+	
+	Args:
+	louvain -> A instancia do algoritmo
+	comunidade -> O id referenta à comunidade
+
+	Return:
+	Uma lista com as comunidades vizinhas à 'comunidade'
+ */
 Comunidades obterComunidadesVizinhas(Louvain louvain, int comunidade) {	
 	Vertices vertices = obterVerticesDaComunidade(louvain, comunidade);
 
@@ -121,6 +170,16 @@ Comunidades obterComunidadesVizinhas(Louvain louvain, int comunidade) {
 	return comunidades;
 }
 
+/*
+	Esta função obtem o id de uma comunidade
+	
+	Args:
+	louvain -> A instancia do algoritmo
+	comunidade -> O id referenta à comunidade
+
+	Return:
+	o id da 'comunidade'
+ */
 int obterIndiceComunidade(Louvain louvain, int comunidade) {	
 	for (int c = 0; c < louvain.comunidades.size(); c++)
 		if (louvain.comunidades[c] == comunidade)
@@ -128,8 +187,16 @@ int obterIndiceComunidade(Louvain louvain, int comunidade) {
 	return -1;
 }
 
-// OBJ FUNCTION ///////////////////////////////////////////////////
+/*
+	Esta função obtem o grau de um vertice
+	
+	Args:
+	louvain -> A instancia do algoritmo
+	vertice -> O id do vertice
 
+	Return:
+	O grau do vertice 'id'
+ */
 int obterGrau(Louvain louvain, int vertice) {
 	int grau = 0;
 	for (int i = 0; i < louvain.vertices.size(); i++)
@@ -137,6 +204,15 @@ int obterGrau(Louvain louvain, int vertice) {
 	return grau;
 }
 
+/*
+	Esta função obtem a quantidade total de arestas em um grafo
+	
+	Args:
+	matriz -> a matriz de adjacência de um grafo
+
+	Return:
+	O número de arestas no grafo
+ */
 int obterQuantidadeTotalArestas(MatrizAdj matriz) {
 	int total = 0;
 	for (int i = 0; i < matriz.size(); i++)
@@ -145,6 +221,16 @@ int obterQuantidadeTotalArestas(MatrizAdj matriz) {
 	return total;
 }
 
+/*
+	Esta função obtem a modularidadeQ de do grafo com suas atuais modularidades
+	Esta é a função objetivo do algoritmo
+	
+	Args:
+	louvain -> A instancia do algoritmo
+	
+	Return:
+	Um valor que indica a modularidade
+ */
 double obterModularidadeQ(Louvain louvain) {
 	double Q = 0.0;
 	double E = obterQuantidadeTotalArestas(louvain.matriz);
@@ -164,8 +250,17 @@ double obterModularidadeQ(Louvain louvain) {
 	return (1 / E) * Q;
 }
 
-// Migrar comunidade
-
+/*
+	Esta função tenta unir dua comunidades e ver se isto aumenta sua modulariade
+	
+	Args:
+	louvain -> A instancia do algoritmo
+	comunidadeOrigem -> id da comunidade base
+	comunidadeDestino -> id da comunidade a ser unificada
+	
+	Return:
+	Uma nova instância do algoritmo
+ */
 Louvain migrarVertices(Louvain louvain, int comunidadeOrigem, int comunidadeDestino) {
 	for (int v = 0; v < louvain.vertices.size(); v++)
 		if (louvain.vertices[v] == comunidadeOrigem)
@@ -182,14 +277,23 @@ Louvain migrarVertices(Louvain louvain, int comunidadeOrigem, int comunidadeDest
 	return louvain;
 }
 
+/*	
+	Esta é a função principal
+	
+	Args:
+	Ela deve receber o arquivo .net com a descrição do grafo como parametro em sua execução
+ */
 int main(int argc, char** argv)
-{
+{	
+	// Caso um valor menor que dois, entõa o arquivo.net não foi passado como parâmetro para o programa
 	if (argc < 2)
         cerr << "no input file's name\n"<< endl;
-	
+
 	Louvain louvain = Louvain(argv[1]);	
+	
 	louvain.modularidade = obterModularidadeQ(louvain);
 	bool houveMelhora;
+	
 	do {
 		houveMelhora = false;
 		for (int comunidade : louvain.comunidades) {
