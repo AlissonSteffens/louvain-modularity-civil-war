@@ -64,7 +64,7 @@ MatrizAdj obterInstancia(string instancia) {
 		// Aqui são lidos os labels do grafo, eles não são utilizados no algorítmo, mas são úteis na exibição das resostas
 		vector<string> nodo{ splitString(linha, ' ') };
 		nomes[i] = nodo[1];
-
+		// cout<<"{id: "<<i<<", label: "<<nodo[1]<<", group: 0},";
 		matriz.push_back(vector<int>());
 		for (int j = 0; j < N; j++)
 			matriz[i].push_back(0);
@@ -75,6 +75,7 @@ MatrizAdj obterInstancia(string instancia) {
 		separado = { splitString(linha, ' ') };
 		int i = stoi(separado[0]) - 1;
 		int j = stoi(separado[1]) - 1;
+		// cout << "{from: "<<i<<", to: "<<j<<"},";
 		matriz[i][j] = 1;
 		matriz[j][i] = 1;
 	}
@@ -312,18 +313,20 @@ int main(int argc, char** argv)
 		}
 	} while (houveMelhora);
 
-	for (int c = 0; c < louvain.comunidades.size(); c++){
+	for (int v = 0; v < louvain.vertices.size(); v++)
+		cout<<"{id: "<<v<<", label: "<<nomes[v]<<", group: "<<louvain.vertices[v]<<"},";
+	// for (int c = 0; c < louvain.comunidades.size(); c++){
 		
 		
-		Vertices vertices = obterVerticesDaComunidade(louvain, c);
-		if(vertices.size() > 0){
-			cout<< "\nComunidade "<< c <<'\n';
-			for(int v : vertices)
-				cout << nomes[v];
-		}
+	// 	Vertices vertices = obterVerticesDaComunidade(louvain, c);
+	// 	if(vertices.size() > 0){
+	// 		cout<< "\nComunidade "<< c <<'\n';
+	// 		for(int v : vertices)
+	// 			cout << nomes[v];
+	// 	}
 		
-		//cout << nomes[v] << '\t' << louvain.vertices[v] << '\n';
-		// printf("V[%d] -> C[%d] \n", v, louvain.vertices[v]);
-	}
+	// 	//cout << nomes[v] << '\t' << louvain.vertices[v] << '\n';
+	// 	// printf("V[%d] -> C[%d] \n", v, louvain.vertices[v]);
+	// }
 		
 }

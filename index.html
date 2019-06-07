@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <title>Network | Groups</title>
+
+    <style>
+        body {
+            color: #333;
+            font: 12pt arial;
+            background-color: #fff;
+        }
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            border: 1px solid #fff;
+            background-color: #fff;
+        }
+    </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
+
+    
+</head>
+
+<body>
+
+<div id="mynetwork"></div>
+<script type="text/javascript">
+    var color = 'white';
+    var len = undefined;
+
+    var nodes = [{id: 0, label: "Logan", group: 0},{id: 1, label: "AntMan", group: 0},{id: 2, label: "BlackPanther", group: 0},{id: 3, label: "Thor", group: 0},{id: 4, label: "Groot", group: 0},{id: 5, label: "Vision", group: 0},{id: 6, label: "Deadpool", group: 0},{id: 7, label: "Triton", group: 0},{id: 8, label: "CapMarvel", group: 0},{id: 9, label: "StarLord", group: 0},{id: 10, label: "Drax", group: 0},{id: 11, label: "Nightcrawler", group: 0},{id: 12, label: "Medusa", group: 0},{id: 13, label: "Aurora", group: 0},{id: 14, label: "Nova", group: 0},{id: 15, label: "Sasquatch", group: 0},{id: 16, label: "SpiderMan", group: 0},{id: 17, label: "Gamora", group: 0},{id: 18, label: "IronMan", group: 0},{id: 19, label: "CapAmerica", group: 0},{id: 20, label: "Naja", group: 0},{id: 21, label: "Namor", group: 0}];
+    //var nodes = [{id: 0, label: "Logan", group: 19},{id: 1, label: "AntMan", group: 17},{id: 2, label: "BlackPanther", group: 21},{id: 3, label: "Thor", group: 19},{id: 4, label: "Groot", group: 17},{id: 5, label: "Vision", group: 19},{id: 6, label: "Deadpool", group: 19},{id: 7, label: "Triton", group: 21},{id: 8, label: "CapMarvel", group: 17},{id: 9, label: "StarLord", group: 17},{id: 10, label: "Drax", group: 17},{id: 11, label: "Nightcrawler", group: 19},{id: 12, label: "Medusa", group: 21},{id: 13, label: "Aurora", group: 17},{id: 14, label: "Nova", group: 19},{id: 15, label: "Sasquatch", group: 17},{id: 16, label: "SpiderMan", group: 19},{id: 17, label: "Gamora", group: 17},{id: 18, label: "IronMan", group: 19},{id: 19, label: "CapAmerica", group: 19},{id: 20, label: "Naja", group: 21},{id: 21, label: "Namor", group: 21}]
+    var edges = [{from: 18, to: 19},{from: 18, to: 14},{from: 18, to: 16},{from: 18, to: 3},{from: 18, to: 2},{from: 18, to: 6},{from: 5, to: 18},{from: 19, to: 3},{from: 16, to: 3},{from: 13, to: 8},{from: 15, to: 8},{from: 1, to: 8},{from: 1, to: 15},{from: 2, to: 16},{from: 2, to: 19},{from: 10, to: 4},{from: 10, to: 9},{from: 17, to: 9},{from: 4, to: 9},{from: 6, to: 0},{from: 6, to: 11},{from: 19, to: 0},{from: 8, to: 12},{from: 7, to: 12},{from: 6, to: 16},{from: 17, to: 8},{from: 17, to: 13},{from: 7, to: 2},{from: 20, to: 12},{from: 20, to: 7},{from: 21, to: 2},{from: 21, to: 7}]
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        nodes: {
+            shape: 'dot',
+            size: 30,
+            font: {
+                size: 32,
+                color: '#333'
+            },
+            borderWidth: 2
+        },
+        edges: {
+            width: 2
+        }
+    };
+    network = new vis.Network(container, data, options);
+</script>
+</body>
+</html>
