@@ -313,7 +313,7 @@ int main(int argc, char** argv)
 	} while (houveMelhora);
 
 	for (int v = 0; v < louvain.vertices.size(); v++){
-		cout << nomes[v] << '\t' << nomes[louvain.vertices[v]] << '\n';
+		cout << nomes[v] << '\t' << louvain.vertices[v] << '\n';
 		// printf("V[%d] -> C[%d] \n", v, louvain.vertices[v]);
 	}
 		
