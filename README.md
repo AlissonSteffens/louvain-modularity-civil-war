@@ -1,7 +1,9 @@
 # louvain-modularity-civil-war
 Graph community simulation of Marvel's Civil Wars
 
-Para visualizar o grafo ao fim da execução basta rodar o programa com os seguintes parâmetros:
+![](./demo.png)
+
+To visualize the graph just run the program with the following parameters:
 
 ```
 ./ProjetoLouvain ./instancias/civilwar2.net -draw > graph.js
